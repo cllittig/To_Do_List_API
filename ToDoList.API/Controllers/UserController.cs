@@ -6,7 +6,7 @@ using ToDoList.API.Persistence;
 namespace ToDoList.API.Controllers
 {
     [ApiController]
-    [Route("to-do-list/user")]
+    [Route("api/to-do-list/users")]
     public class UserController :ControllerBase
     {
 
@@ -22,61 +22,88 @@ namespace ToDoList.API.Controllers
         //Rota Get geral
         [HttpGet]
 
-        public IActionResult GetAll()
+        public IActionResult GetAllUsers()
         {
-            var userRequest = _context.Users.Where(u => !u.IsDeleted).ToList();
+            try
+            {
+                var userRequest = _context.Users.Where(u => !u.IsDeleted).ToList();
 
-            return Ok(userRequest);
+                return Ok(userRequest);
+            }catch (Exception ex)
+                {
+                    return StatusCode(500, $"excepted error {ex.Message}");
+                }
         }
 
 
         //Rota Get baseada em um Id
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public IActionResult GetUserById(int id)
         {
-            var userRequest = _context.Users
-                .SingleOrDefault(u=> u.UserId == id);
+            try
+            {
+                var userRequest = _context.Users
+                    .SingleOrDefault(u => u.UserId == id);
 
-            if(userRequest == null)
-            {
-                return NotFound();
+                if (userRequest == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return Ok(userRequest);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return Ok(userRequest);
+                return StatusCode(500, $"excepted error {ex.Message}");
             }
         }
 
         //Rota post 
         [HttpPost]
 
-        public IActionResult Post(User user)
+        public IActionResult PostUser(User user)
         {
-            //adicionando uma instancia do usuario
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            try
+            {
+                //adicionando uma instancia do usuario
+                _context.Users.Add(user);
+                _context.SaveChanges();
 
-            return CreatedAtAction(nameof(GetById), new { id = user.UserId }, user);
+                return CreatedAtAction(nameof(GetUserById), new { id = user.UserId }, user);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"excepted error {ex.Message}");
+            }
         }
 
         //Rota Put para atualização
         [HttpPut("{id}")]
 
-        public IActionResult Update(User userInput, int id)
+        public IActionResult UpdateUser(User userInput, int id)
         {
-            var userRequest = _context.Users.SingleOrDefault(d => d.UserId == id);
-
-            if(userRequest == null)
+            try
             {
-                return NotFound();
+                var userRequest = _context.Users.SingleOrDefault(d => d.UserId == id);
+
+                if (userRequest == null)
+                {
+                    return NotFound();
+                }
+
+                userRequest.Update(userInput.UserFirstName, userInput.UserSecondName, userInput.UserAge, userInput.UserEmail);
+
+                _context.Users.Update(userRequest);
+                _context.SaveChanges();
+
+                return NoContent();
             }
-
-            userRequest.Update(userInput.UserFirstName, userInput.UserSecondName, userInput.UserAge, userInput.UserEmail);
-
-            _context.Users.Update(userRequest);
-            _context.SaveChanges();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"excepted error {ex.Message}");
+            }
 
 
         }
@@ -84,15 +111,22 @@ namespace ToDoList.API.Controllers
         //Rota para deletar um usuario baseado no id
         [HttpDelete("{id}")]
 
-        public IActionResult Delete(int id)
+        public IActionResult DeleteUser(int id)
         {
-            var userRequest = _context.Users.SingleOrDefault(d => d.UserId == id);
+            try
+            {
+                var userRequest = _context.Users.SingleOrDefault(d => d.UserId == id);
 
-            userRequest.MarkAsDeleted();
+                userRequest.MarkAsDeleted();
 
-            _context.SaveChanges();
+                _context.SaveChanges();
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"excepted error {ex.Message}");
+            }
         }
 
     }

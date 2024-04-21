@@ -27,5 +27,13 @@ namespace ToDoList.API.Entities
         {
             IsDeleted = true;
         }
+
+        public void Update(string taskTitle,string taskDescription, string taskPriority,string taskStatus)
+        {
+            TaskTitle = taskTitle;
+            TaskDescription = taskDescription;
+            TaskPriority = taskPriority;
+            TaskStatus = taskStatus;
+        }
     }
 }
