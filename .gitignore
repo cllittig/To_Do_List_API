@@ -1,0 +1,27 @@
+# Arquivos de compilação e binários
+bin/
+obj/
+
+# Arquivos de dependências gerenciadas
+*.dll
+*.exe
+*.pdb
+*.lock.json
+
+# Arquivos de publicação ou artefatos de implantação
+publish/
+*.publish.xml
+
+# Arquivos temporários ou de cache
+*.log
+.vs/
+*.suo
+*.cache
+
+# Arquivos de configuração local
+appsettings.Development.json
+launchSettings.json
+
+# Arquivos de usuário específicos do IDE (Visual Studio)
+.vscode/
+*.sln.ide/
