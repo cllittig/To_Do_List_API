@@ -1,38 +1,71 @@
-1. **Usuários:**
-   - ID (chave primária)
-   - Nome de usuário
-   - E-mail
-   - Senha (hash)
-   - Data de criação
+# To Do List API
 
-2. **Tarefas:**
-   - ID (chave primária)
-   - Título
-   - Descrição
-   - Data de criação
-   - Data de vencimento
-   - Prioridade (baixa, média, alta, etc.)
-   - Status (pendente, em andamento, concluída, etc.)
-   - ID do usuário (chave estrangeira para associar a tarefa ao usuário que a criou)
+## Esse projeto de fins pessoais tem como objetivo por em praticas habilidades de programção back-end.
 
-3. **Categorias:**
-   - ID (chave primária)
-   - Nome da categoria
-   - Descrição da categoria (opcional)
-   - ID do usuário (chave estrangeira para associar a categoria ao usuário que a criou)
+1. **Ferramentas utilizadas:** 
+    - C#
+    - Entity FrameWork Core
+    - ASP.net core
+    - MySql Server
+    - MySql Workbench
 
-4. **Tags:**
-   - ID (chave primária)
-   - Nome da tag
-   - Descrição da tag (opcional)
-   - ID do usuário (chave estrangeira para associar a tag ao usuário que a criou)
+2. **Entidades:**
 
-5. **Relacionamento entre Tarefas e Categorias (Many-to-Many):**
-   - ID da relação (chave primária)
-   - ID da tarefa (chave estrangeira referenciando a tabela de tarefas)
-   - ID da categoria (chave estrangeira referenciando a tabela de categorias)
+    1. **Users:**
+       - UserId (chave primária)
+       - UserFirstName
+       - USerSecondName
+       - UserEmail
+       - UserAge
+       - UserPassword
+       - UserStartDate
+       - IsDeleted
+       - UserAddress (referencia para criação do relacionamento)
+       - UserTasks (referencia para criação do relacionamento)
+       - UserCategory (referencia para criação do relacionamento)
+       - UserTags (referencia para criação do relacionamento)
 
-6. **Relacionamento entre Tarefas e Tags (Many-to-Many):**
-   - ID da relação (chave primária)
-   - ID da tarefa (chave estrangeira referenciando a tabela de tarefas)
-   - ID da tag (chave estrangeira referenciando a tabela de tags)
+    2. **Tasks:**
+       - TaskId (chave primária)
+       - TaskTitle
+       - TaskDescription
+       - TaskCreationDate
+       - TaskDueDate
+       - TaskPriority
+       - TaskStatus
+       - IsDeleted
+       - UserId (chave estrangeira para associar a tarefa ao usuário que a criou)
+       - CategoryId (chave estrangeira para associar a tarefa a uma categoria)
+       
+    3. **Category:**
+       - CategoryId (chave primária)
+       - CategoryName
+       - CategoryDescription
+       - IsDeleted
+       - CategoryTasks (referencia para relacionamento com as tasks)
+       - UserId (chave estrangeira para associar a categoria ao usuário que a criou)
+
+    4. **Tags:**
+       - TagId (chave primária)
+       - TagName
+       - TagDescription (opcional)
+       - IsDeleted
+       - Task (referencia para relacionamento com tasks)
+       - TaskTag (referencia para relacionamento com tasks)
+       - UserId (chave estrangeira para associar a tag ao usuário que a criou)
+
+    5. **Address:**
+       - ID (chave primária)
+       - AddressStreet 
+       - AddressNumber
+       - AddressComplement
+       - AddressCity
+       - AddressState
+       - AddressPostalCode
+       - UserId (chave estrangeira)
+
+    6. **Relacionamento entre Tarefas e Tags (Many-to-Many):**
+       - TaskId (chave Composta p1)
+       - TagId (chave Composta p2)
+       - TagId (referencia para relacionamento)
+       - TaskId (referencia para relacionamento)

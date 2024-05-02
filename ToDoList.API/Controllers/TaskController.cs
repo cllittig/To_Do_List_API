@@ -19,11 +19,11 @@ namespace ToDoList.API.Controllers
 
 
         [HttpGet]
-        public IActionResult GetAllTasks()
+        public async Task<IActionResult> GetAllTasks()
         {
             try
             {
-                var tasksRequest = _context.Tasks.Where(tk => !tk.IsDeleted).ToList();
+                var tasksRequest = await _context.Tasks.Where(tk => !tk.IsDeleted).ToListAsync();
 
                 return Ok(tasksRequest);
             }
@@ -57,12 +57,12 @@ namespace ToDoList.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostTask(Tasks task)
+        public async Task<IActionResult> PostTask(Tasks task)
         {
             try
             {
                 _context.Tasks.Add(task);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 return CreatedAtAction(nameof(GetTasksById), new { id = task.TaskId }, task);
             }
@@ -73,11 +73,11 @@ namespace ToDoList.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateTask(Task taskInput, int id) 
+        public async Task<IActionResult> UpdateTask(Task taskInput, int id) 
         {
             try
             {
-                var taskRequest = _context.Tasks.SingleOrDefault(d => d.TaskId == id);
+                var taskRequest = await _context.Tasks.SingleOrDefaultAsync(d => d.TaskId == id);
 
                 if (taskRequest == null)
                 {
@@ -86,7 +86,7 @@ namespace ToDoList.API.Controllers
 
                 taskRequest.Update(taskRequest.TaskTitle, taskRequest.TaskDescription, taskRequest.TaskPriority, taskRequest.TaskStatus);
                 _context.Tasks.Update(taskRequest);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 return NoContent();
             }
@@ -97,15 +97,16 @@ namespace ToDoList.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteTask(int id)
+        public async Task<IActionResult> DeleteTask(int id)
         {
             try
             {
-                var taskRequest = _context.Tasks.SingleOrDefault(d => d.TaskId == id);
+                var taskRequest = await _context.Tasks.SingleOrDefaultAsync(d => d.TaskId == id);
 
                 taskRequest.MarkIsDeleted();
 
-                _context.SaveChanges();
+                _context.Tasks.Remove(taskRequest); 
+                await _context.SaveChangesAsync();
 
                 return NoContent();
             }

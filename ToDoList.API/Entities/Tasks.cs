@@ -17,7 +17,7 @@ namespace ToDoList.API.Entities
         public string TaskPriority { get; set; }
         public string TaskStatus { get; set; }
         public int UserId { get; set; }
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
         public bool IsDeleted { get; set; } = false;
 
         public List<Tag> Tags { get; set; } = new List<Tag>();

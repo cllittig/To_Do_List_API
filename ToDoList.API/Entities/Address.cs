@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace ToDoList.API.Entities
 {
@@ -11,12 +11,25 @@ namespace ToDoList.API.Entities
         [Key]
         public int AddressId { get; set; }
         public string AddressStreet { get; set; }
-        public string AddressNumber { get; set; }
+        public int AddressNumber { get; set; }
         public string AddressComplement { get; set; }
         public string AddressCity { get; set; }
         public string AddressState { get; set; }
         public string AddressPostalCode { get; set; }
         public int UserId { get; set; }
+
+        public void Update(string addressStreet, int addressNumber, string addressComplement, string addressCity, string addressState, string postalCode)
+        {
+            AddressStreet = addressStreet;
+            AddressNumber = addressNumber;
+            AddressComplement = addressComplement;
+            AddressCity = addressCity;
+            AddressState = addressState;
+            AddressPostalCode = postalCode;
+
+        }
     }
+
+    
 }
 

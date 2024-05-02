@@ -17,6 +17,11 @@ namespace ToDoList.API.Entities
         public List<Tasks> Task { get; set; } = new List<Tasks>();
         public List<TaskTag> TaskTag { get; set; } = new List<TaskTag>();
 
+        public void Update(string tagName, string tagDescription)
+        {
+            TagName = tagName;
+            TagDescription = tagDescription;
+        }
         public void MarkIsDeleted()
         {
             IsDeleted = true;

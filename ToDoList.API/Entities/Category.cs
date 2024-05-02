@@ -12,10 +12,15 @@ namespace ToDoList.API.Entities
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string CategoryDescription { get; set; }
-        public ICollection<Tasks> CategoryTasks { get; } = new List<Tasks>();
+        public ICollection<Tasks>? CategoryTasks { get; } = new List<Tasks>();
         public int UserId { get; set; }
         public bool IsDeleted { get; set; } = false;
         
+        public void Update(string categoryName,string categoryDescription)
+        {
+            CategoryName = categoryName;
+            CategoryDescription = categoryDescription; 
+        }
 
         public void MarkIsDeleted()
         {

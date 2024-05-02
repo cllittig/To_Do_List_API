@@ -6,14 +6,13 @@ using ToDoList.API.Persistence;
 namespace ToDoList.API.Controllers
 {
     [ApiController]
-    [Route("api/to-do-list/users")]
-    public class UserController :ControllerBase
+    [Route("api/to-do-list/tag")]
+    public class TagController : Controller
     {
-
         private readonly ToDoListDbContext _context;
 
         //injeção de dependencia
-        public UserController(ToDoListDbContext context)
+        public TagController(ToDoListDbContext context)
         {
             _context = context;
         }
@@ -21,37 +20,37 @@ namespace ToDoList.API.Controllers
 
         //Rota Get geral
         [HttpGet]
-
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetAllTag()
         {
             try
             {
-                var userRequest = await _context.Users.Where(u => !u.IsDeleted).ToListAsync();
+                var tagRequest = await _context.Users.Where(tg => !tg.IsDeleted).ToListAsync();
 
-                return Ok(userRequest);
-            }catch (Exception ex)
-                {
-                    return StatusCode(500, $"excepted error {ex.Message}");
-                }
+                return Ok(tagRequest);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"excepted error {ex.Message}");
+            }
         }
 
 
         //Rota Get baseada em um Id
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserById(int id)
+        public async Task<IActionResult> GetTagById(int id)
         {
             try
             {
-                var userRequest = await _context.Users
-                    .SingleOrDefaultAsync(u => u.UserId == id);
+                var tagRequest = await _context.Tags
+                    .SingleOrDefaultAsync(u => u.TagId == id);
 
-                if (userRequest == null)
+                if (tagRequest == null)
                 {
                     return NotFound();
                 }
                 else
                 {
-                    return Ok(userRequest);
+                    return Ok(tagRequest);
                 }
             }
             catch (Exception ex)
@@ -63,15 +62,15 @@ namespace ToDoList.API.Controllers
         //Rota post 
         [HttpPost]
 
-        public async Task<IActionResult> PostUser(User user)
+        public async Task<IActionResult> PostTag(Tag tag)
         {
             try
             {
                 //adicionando uma instancia do usuario
-                _context.Users.Add(user);
+                _context.Tags.Add(tag);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetUserById), new { id = user.UserId }, user);
+                return CreatedAtAction(nameof(GetTagById), new { id = tag.TagId }, tag);
             }
             catch (Exception ex)
             {
@@ -82,7 +81,7 @@ namespace ToDoList.API.Controllers
         //Rota Put para atualização
         [HttpPut("{id}")]
 
-        public async Task<IActionResult> UpdateUser(User userInput, int id)
+        public async Task<IActionResult> UpdateTag(User userInput, int id)
         {
             try
             {
@@ -92,13 +91,15 @@ namespace ToDoList.API.Controllers
                 {
                     return NotFound();
                 }
+                else
+                {
+                    userRequest.Update(userInput.UserFirstName, userInput.UserSecondName, userInput.UserAge, userInput.UserEmail);
+    
+                    _context.Users.Update(userRequest);
+                    await _context.SaveChangesAsync();
 
-                userRequest.Update(userInput.UserFirstName, userInput.UserSecondName, userInput.UserAge, userInput.UserEmail);
-
-                _context.Users.Update(userRequest);
-                await _context.SaveChangesAsync();
-
-                return NoContent();
+                    return NoContent();
+                }
             }
             catch (Exception ex)
             {
@@ -117,19 +118,12 @@ namespace ToDoList.API.Controllers
             {
                 var userRequest = await _context.Users.SingleOrDefaultAsync(d => d.UserId == id);
 
-                if (userRequest == null)
-                {
-                    return NoContent();
-                }
-                else
-                {
-                    userRequest.MarkAsDeleted();
+                userRequest.MarkAsDeleted();
 
-                    _context.Users.Remove(userRequest);
-                    await _context.SaveChangesAsync();
+                _context.Users.Remove(userRequest);
+                await _context.SaveChangesAsync();
 
-                    return NoContent();
-                }
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -139,3 +133,4 @@ namespace ToDoList.API.Controllers
 
     }
 }
+
